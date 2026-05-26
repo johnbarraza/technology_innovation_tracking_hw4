@@ -4,11 +4,15 @@ import os
 from pathlib import Path
 
 import pandas as pd
+from dotenv import load_dotenv
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data"
 OUTPUT_DIR = ROOT / "output"
+
+# Carga las variables de entorno desde el .env del proyecto
+load_dotenv(ROOT / ".env")
 
 
 def ensure_parent_dir(path: Path) -> None:
