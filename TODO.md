@@ -1,31 +1,16 @@
 # TODO
 
-## Persona 1: Datos
+## Persona 1 — Data & Labels (Aiko)
+- [ ] Crear token de GitHub y guardarlo en `.env`
+- [ ] Implementar `src/github_collector.py` → output: `data/raw/repositories_raw.csv`
+- [ ] Implementar `src/preprocessing.py`   → output: `data/processed/repositories.csv`
+- [ ] Implementar `src/llm_labeling.py`    → output: `data/labeled/labeled_repositories.csv`
+- [ ] Escribir notas sobre sesgo de selección
 
-- [ ] Crear token de GitHub y guardarlo en `.env`.
-- [ ] Usar solo rutas relativas con `ROOT` de `src/utils.py`.
-- [ ] Definir queries de busqueda por tecnologia.
-- [ ] Implementar `src/github_collector.py`.
-- [ ] Extraer minimo 6 senales por repositorio.
-- [ ] Guardar `data/raw/repositories_raw.csv`.
-- [ ] Implementar `src/preprocessing.py`.
-- [ ] Guardar `data/processed/repositories.csv` con el contrato de columnas.
-- [ ] Escribir notas sobre sesgo de seleccion.
-
-## Persona 2: LLM + BERT
-
-- [ ] Copiar `.env.example` a `.env` y completar la API key usada.
-- [ ] Usar solo rutas relativas con `ROOT` de `src/utils.py`.
-- [ ] Implementar `src/summarization.py`.
-- [ ] Crear `repository_summary`.
-- [ ] Implementar `src/llm_labeling.py`.
-- [ ] Definir prompt y categorias.
-- [ ] Guardar `data/labeled/labeled_repositories.csv`.
-- [ ] Crear train/validation/test.
-- [ ] Implementar `src/train.py`.
-- [ ] Fine-tunear modelo BERT liviano.
-- [ ] Implementar `src/evaluation.py`.
-- [ ] Guardar metricas, matriz de confusion y ejemplos.
+## Persona 2 — Model (nombre)
+- [ ] Implementar `src/summarization.py`   → output: `data/processed/repository_summaries.csv`
+- [ ] Implementar `src/train.py`
+- [ ] Implementar `src/evaluation.py`
 
 ## Persona 3: App + Presentacion
 
