@@ -7,8 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1BfMLEIKVy2yFLyT3VT8Tyn9RkOLwx79a
 """
 
-!git clone -b feature/data-collection-aiko https://github.com/johnbarraza/technology_innovation_tracking_hw4.git
-
 import os
 os.chdir('/content/technology_innovation_tracking_hw4')
 print(os.getcwd())
@@ -161,7 +159,7 @@ def make_compute_metrics():
 
 def main():
     args = parse_args()
-
+    
     # ── Fix labels if needed ──────────────────────────────────────────
     df_check = pd.read_csv(args.data_path)
     if 'weak_label' in df_check.columns and df_check['label'].isna().all():
@@ -175,7 +173,7 @@ def main():
         df_check.to_csv(args.data_path, index=False)
         print("✅ Labels auto-corregidas desde weak_label")
     # ─────────────────────────────────────────────────────────────────
-
+    
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # ── Data ──────────────────────────────────────────────────────────────
