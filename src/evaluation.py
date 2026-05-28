@@ -339,3 +339,22 @@ from IPython.display import Image, display
 display(Image("output/metrics/confusion_matrix.png"))
 display(Image("output/metrics/confusion_matrix_normalized.png"))
 display(Image("output/metrics/per_class_metrics.png"))
+
+import sys
+sys.argv = ['evaluation.py']
+
+import sys
+sys.argv = [
+    'evaluation.py',
+    '--model_dir', 'models/trained_models/',
+    '--test_path', 'models/trained_models/test_set.csv',
+    '--output_dir', 'output/metrics/'
+]
+main()
+
+from google.colab import files
+files.download('output/metrics/confusion_matrix.png')
+files.download('output/metrics/confusion_matrix_normalized.png')
+files.download('output/metrics/per_class_metrics.png')
+files.download('output/metrics/metrics.csv')
+files.download('output/metrics/classification_report.txt')
