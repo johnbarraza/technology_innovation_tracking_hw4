@@ -273,3 +273,36 @@ import shutil
 from google.colab import files
 shutil.make_archive('trained_models', 'zip', 'models/trained_models/')
 files.download('trained_models.zip')
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+df = pd.read_csv('data/labeled/labeled_repositories.csv')
+
+label_map = {
+    'emerging_technology': 'emerging',
+    'mature_ecosystem': 'mature',
+    'declining_technology': 'declining',
+    'experimental_niche': 'experimental'
+}
+df['label'] = df['weak_label'].map(label_map)
+
+LABELS = ["declining", "emerging", "experimental", "mature"]
+LABEL2ID = {label: idx for idx, label in enumerate(LABELS)}
+df['label_id'] = df['label'].map(LABEL2ID)
+
+train_df, temp_df = train_test_split(df, test_size=0.30, random_state=42, stratify=df['label_id'])
+val_df, test_df = train_test_split(temp_df, test_size=0.50, random_state=42, stratify=temp_df['label_id'])
+
+import os
+os.makedirs('data/splits', exist_ok=True)
+train_df.to_csv('data/splits/train.csv', index=False)
+val_df.to_csv('data/splits/val.csv', index=False)
+test_df.to_csv('data/splits/test.csv', index=False)
+
+print(f"✅ Train: {len(train_df)} | Val: {len(val_df)} | Test: {len(test_df)}")
+
+from google.colab import files
+files.download('data/splits/train.csv')
+files.download('data/splits/val.csv')
+files.download('data/splits/test.csv')
