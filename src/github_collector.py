@@ -70,6 +70,22 @@ TECH_QUERIES: list[tuple[str, str]] = [
     ("blockchain infrastructure",      "experimental_niche"),
 ]
 
+# Queries adicionales — solo se ejecutan con collect_additional()
+ADDITIONAL_QUERIES: list[tuple[str, str]] = [
+    # declining_technology — nuevos
+    ("backbone js",                 "declining_technology"),
+    ("requirejs",                   "declining_technology"),
+    ("gulp build",                  "declining_technology"),
+    ("knockout js",                 "declining_technology"),
+    ("flash actionscript",          "declining_technology"),
+    # experimental_niche — nuevos
+    ("homomorphic encryption",      "experimental_niche"),
+    ("dna computing",               "experimental_niche"),
+    ("swarm robotics",              "experimental_niche"),
+    ("neuromorphic chip",           "experimental_niche"),
+    ("photonic computing",          "experimental_niche"),
+]
+
 REPOS_PER_QUERY = 20
 MIN_STARS       = 10
 
@@ -240,10 +256,59 @@ def collect_repositories() -> pd.DataFrame:
     return df
 
 
+def collect_additional() -> pd.DataFrame:
+    """
+    Ejecuta solo ADDITIONAL_QUERIES y anexa los resultados al CSV existente.
+
+    - Carga los full_name ya presentes en RAW_OUTPUT para deduplicar.
+    - Usa mode='a' (append) sin sobrescribir el archivo existente.
+    - Retorna solo las filas nuevas agregadas.
+    """
+    seen: set[str] = set()
+    if RAW_OUTPUT.exists():
+        existing = pd.read_csv(RAW_OUTPUT, usecols=["full_name"])
+        seen = set(existing["full_name"].tolist())
+        logger.info(f"CSV existente: {len(seen)} repos ya registrados")
+
+    all_records: list[dict] = []
+
+    for query, category_hint in ADDITIONAL_QUERIES:
+        logger.info(f"Query adicional: '{query}' [{category_hint}]")
+        repos = _search_repos(query)
+        time.sleep(1.0)
+
+        for repo in repos:
+            fn = repo["full_name"]
+            if fn in seen or repo.get("fork"):
+                continue
+            seen.add(fn)
+            logger.info(f"  → {fn}")
+            record = _extract_signals(repo, query, category_hint)
+            all_records.append(record)
+            time.sleep(0.4)
+
+    df_new = pd.DataFrame(all_records)
+    if df_new.empty:
+        logger.info("No se encontraron repos nuevos para agregar.")
+        return df_new
+
+    write_header = not RAW_OUTPUT.exists()
+    df_new.to_csv(RAW_OUTPUT, mode="a", header=write_header, index=False)
+    logger.info(f"Agregados {len(df_new)} repos nuevos a {RAW_OUTPUT.relative_to(ROOT)}")
+    if "category_hint" in df_new.columns:
+        logger.info(f"Por categoría:\n{df_new['category_hint'].value_counts().to_string()}")
+    return df_new
+
+
 def main() -> None:
-    df = collect_repositories()
-    write_csv(df, RAW_OUTPUT)
-    print(f"Saved {len(df)} rows to {RAW_OUTPUT.relative_to(ROOT)}")
+    import sys as _sys
+    if "--additional" in _sys.argv:
+        df = collect_additional()
+        print(f"Appended {len(df)} new rows to {RAW_OUTPUT.relative_to(ROOT)}")
+    else:
+        df = collect_repositories()
+        write_csv(df, RAW_OUTPUT)
+        print(f"Saved {len(df)} rows to {RAW_OUTPUT.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
