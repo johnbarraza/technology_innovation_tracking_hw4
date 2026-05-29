@@ -1,0 +1,11 @@
+# Model weights (too large for GitHub)
+models/trained_models/*.safetensors
+models/trained_models/*.bin
+models/trained_models/training_args.bin
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.pyc
