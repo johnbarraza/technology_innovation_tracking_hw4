@@ -6,7 +6,7 @@
 
 ## ¿Qué hice yo y qué te entrego?
 
-Recolecté 371 repositorios de GitHub, los limpié, creé features derivadas y generé una representación textual para que el LLM los etiquete. Te entrego tres archivos:
+Recolecté 526 repositorios de GitHub, los limpié, creé features derivadas y generé una representación textual para que el LLM los etiquete. Te entrego tres archivos:
 
 ```
 data/raw/repositories_raw.csv        → datos crudos de la API de GitHub
@@ -44,8 +44,8 @@ Busqué por **query de tópico** en la API de GitHub, agrupados en 4 bloques que
 |---|---|
 | emerging_technology | ai agents, vector database, retrieval augmented generation, llm agents, multimodal ai |
 | mature_ecosystem | kubernetes, react framework, mlops platform, docker container, django web framework |
-| declining_technology | jquery plugin, angularjs, grunt build tool, coffeescript, bower package manager |
-| experimental_niche | quantum computing, robotics framework, neuromorphic computing, cybersecurity tooling, blockchain infrastructure |
+| declining_technology | jquery plugin, angularjs, grunt build tool, coffeescript, bower package manager, backbone js, requirejs, gulp build, knockout js, flash actionscript |
+| experimental_niche | quantum computing, robotics framework, neuromorphic computing, cybersecurity tooling, blockchain infrastructure, homomorphic encryption, dna computing, swarm robotics, neuromorphic chip, photonic computing |
 
 **Filtros aplicados:**
 - Mínimo 10 estrellas (descarta repos casi vacíos)
@@ -53,7 +53,7 @@ Busqué por **query de tópico** en la API de GitHub, agrupados en 4 bloques que
 - Sin duplicados por `full_name`
 - Descripción mínima de 10 caracteres (necesario para el LLM)
 
-**Resultado:** 371 repos → 370 después de limpieza
+**Resultado:** 527 repos → 526 después de limpieza (~175 declining_technology, ~158 experimental_niche, ~100 mature_ecosystem, ~94 emerging_technology)
 
 ---
 
@@ -136,8 +136,11 @@ pip install -r requirements.txt
 cp .env.example .env
 # editar .env y poner GITHUB_TOKEN y DEEPSEEK_API_KEY
 
-# 3. Recolectar repos de GitHub (~20 minutos)
+# 3. Recolectar repos de GitHub (~20 minutos para queries base)
 python src/github_collector.py
+
+# 3b. Agregar queries adicionales sin sobreescribir (~30 minutos)
+python src/github_collector.py --additional
 
 # 4. Limpiar y crear features (~segundos)
 python src/preprocessing.py
@@ -151,7 +154,7 @@ python src/llm_labeling.py
 ## Limitaciones conocidas (importante para el README y el video)
 
 - Los tópicos de GitHub son **auto-asignados** por los autores → sesgo de selección posible
-- `declining_technology` tiene menos repos (77) porque hay menos repos de tecnologías en declive con tópicos bien etiquetados
+- `declining_technology` y `experimental_niche` tienen más repos (~175 y ~158) porque se agregaron 10 queries adicionales para mejorar el balance del dataset
 - Las etiquetas del LLM son **weak labels**, no ground truth — el modelo puede equivocarse en casos limítrofes
 - GitHub solo muestra código abierto → proyectos privados no están representados
 - `community_breadth` incluye forks automáticos (mirrors, backups) que no son uso real

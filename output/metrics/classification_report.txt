@@ -1,22 +1,22 @@
 TEST SET RESULTS
 ==============================================================
-Accuracy           : 0.4286
-Weighted Precision : 0.2812
-Weighted Recall    : 0.4286
-Weighted F1        : 0.3387
-Macro Precision    : 0.2187
-Macro Recall       : 0.3333
-Macro F1           : 0.2634
+Accuracy           : 0.5823
+Weighted Precision : 0.6378
+Weighted Recall    : 0.5823
+Weighted F1        : 0.5765
+Macro Precision    : 0.6504
+Macro Recall       : 0.5808
+Macro F1           : 0.5835
 
 Classification Report:
 
               precision    recall  f1-score   support
 
-   declining     0.0000    0.0000    0.0000         4
-    emerging     0.5200    0.7222    0.6047        18
-experimental     0.0000    0.0000    0.0000        16
-      mature     0.3548    0.6111    0.4490        18
+   declining     0.6842    0.7647    0.7222        17
+    emerging     0.6923    0.5000    0.5806        18
+experimental     0.4474    0.7083    0.5484        24
+      mature     0.7778    0.3500    0.4828        20
 
-    accuracy                         0.4286        56
-   macro avg     0.2187    0.3333    0.2634        56
-weighted avg     0.2812    0.4286    0.3387        56
+    accuracy                         0.5823        79
+   macro avg     0.6504    0.5808    0.5835        79
+weighted avg     0.6378    0.5823    0.5765        79
