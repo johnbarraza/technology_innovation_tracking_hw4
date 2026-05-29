@@ -1,0 +1,20 @@
+{
+  "labels": [
+    "declining",
+    "emerging",
+    "experimental",
+    "mature"
+  ],
+  "label2id": {
+    "declining": 0,
+    "emerging": 1,
+    "experimental": 2,
+    "mature": 3
+  },
+  "id2label": {
+    "0": "declining",
+    "1": "emerging",
+    "2": "experimental",
+    "3": "mature"
+  }
+}
