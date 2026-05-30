@@ -197,7 +197,7 @@ with tab_eda:
             st.warning("No numeric repository signals found yet.")
 
         with st.expander("Data Preview"):
-            st.dataframe(analysis_df, use_container_width=True)
+            st.dataframe(analysis_df, width='stretch')
 
 
 with tab_results:
@@ -217,12 +217,19 @@ with tab_results:
         show_missing_data_notice(CONFUSION_MATRIX, "the confusion matrix")
     else:
         st.pyplot(plot_confusion_matrix(confusion_df))
+        st.markdown("""
+        **Interpretation:**
+        - **declining** (F1=0.72): best predicted class. 13/17 correct. 4 misclassified as experimental.
+        - **emerging** (F1=0.58): 9/18 correct. 7 misclassified as experimental — model confuses early-stage signals.
+        - **experimental** (F1=0.55): 17/24 correct. 4 misclassified as declining, 3 as emerging. High recall, low precision.
+        - **mature** (F1=0.48): worst class. Only 7/20 correct. **10 misclassified as experimental** — biggest confusion. Model struggles to distinguish mature stability from experimental niche activity.
+        """)
 
     st.subheader("Category Performance")
     if report_df.empty:
         show_missing_data_notice(CLASSIFICATION_REPORT, "per-category precision, recall, and F1")
     else:
-        st.dataframe(report_df, use_container_width=True)
+        st.dataframe(report_df, width='stretch')
 
     st.subheader("Baseline vs Alternative")
     baseline = metrics.get("baseline") if metrics else None
@@ -236,7 +243,7 @@ with tab_results:
                 {"approach": "alternative", **(alternative or {})},
             ]
         )
-        st.dataframe(comparison_df, use_container_width=True)
+        st.dataframe(comparison_df, width='stretch')
 
 
 with tab_explorer:
@@ -281,7 +288,7 @@ with tab_explorer:
                 filtered_df[name_col].astype(str).str.contains(search, case=False, na=False)
             ]
 
-        st.dataframe(filtered_df, use_container_width=True)
+        st.dataframe(filtered_df, width='stretch')
 
         if not filtered_df.empty:
             selected_index = st.selectbox(
@@ -300,4 +307,4 @@ with tab_explorer:
     if examples_df.empty:
         show_missing_data_notice(PREDICTION_EXAMPLES, "correct and incorrect prediction examples")
     else:
-        st.dataframe(examples_df, use_container_width=True)
+        st.dataframe(examples_df, width='stretch')

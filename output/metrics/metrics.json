@@ -1,0 +1,45 @@
+{
+  "accuracy": 0.5823,
+  "precision": 0.6378,
+  "recall": 0.5823,
+  "f1": 0.5765,
+  "macro_precision": 0.6504,
+  "macro_recall": 0.5808,
+  "macro_f1": 0.5835,
+  "per_class": {
+    "declining": {
+      "precision": 0.6842,
+      "recall": 0.7647,
+      "f1": 0.7222,
+      "support": 17
+    },
+    "emerging": {
+      "precision": 0.6923,
+      "recall": 0.5,
+      "f1": 0.5806,
+      "support": 18
+    },
+    "experimental": {
+      "precision": 0.4474,
+      "recall": 0.7083,
+      "f1": 0.5484,
+      "support": 24
+    },
+    "mature": {
+      "precision": 0.7778,
+      "recall": 0.35,
+      "f1": 0.4828,
+      "support": 20
+    }
+  },
+  "baseline": {
+    "description": "DistilBERT trained on 370 repos, no class balancing",
+    "accuracy": 0.4286,
+    "note": "Model only predicted emerging and mature, never declining or experimental"
+  },
+  "alternative": {
+    "description": "DistilBERT trained on 526 repos with more declining/experimental samples",
+    "accuracy": 0.5823,
+    "note": "Model now predicts all 4 classes. Class imbalance partially addressed."
+  }
+}

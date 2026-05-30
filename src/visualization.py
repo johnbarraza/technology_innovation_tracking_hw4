@@ -26,8 +26,19 @@ def plot_numeric_signal_by_category(df: pd.DataFrame, signal_col: str, label_col
     fig, ax = _figure()
     plot_df = df[[signal_col, label_col]].dropna().copy()
     plot_df[label_col] = plot_df[label_col].astype(str)
+
+    # Clip at p99 to prevent outliers from squashing the boxplot
+    p99 = plot_df[signal_col].quantile(0.99)
+    original_max = plot_df[signal_col].max()
+    n_clipped = int((plot_df[signal_col] > p99).sum())
+    plot_df[signal_col] = plot_df[signal_col].clip(upper=p99)
+
     sns.boxplot(data=plot_df, x=signal_col, y=label_col, ax=ax, color="#86B6A8")
-    ax.set_xlabel(signal_col.replace("_", " ").title())
+    ax.set_xlabel(
+        signal_col.replace("_", " ").title()
+        + (f"  (clipped at p99={p99:.1f}, {n_clipped} outlier(s) hidden)"
+           if n_clipped else "")
+    )
     ax.set_ylabel("Category")
     ax.set_title(f"{signal_col.replace('_', ' ').title()} by Category")
     fig.tight_layout()

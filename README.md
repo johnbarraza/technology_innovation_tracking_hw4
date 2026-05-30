@@ -58,26 +58,37 @@ LLM labels are treated as weak labels rather than ground truth.
 
 ## Dataset Split
 
-The planned split is:
+- **Train:** 368 repositories (70%)
+- **Validation:** 79 repositories (15%)
+- **Test:** 79 repositories (15%)
 
-- 70% train
-- 15% validation
-- 15% test
-
-The test set remains unseen during model training.
+The test set remained unseen during training and was used only for final evaluation.
 
 ## BERT Model
 
-The planned model is a lightweight BERT-based classifier such as DistilBERT or MiniLM. The input is the repository representation, and the output is the predicted technology momentum category.
+DistilBERT (`distilbert-base-uncased`) fine-tuned on 526 repository text representations. Training: 70% train / 15% validation / 15% test, 3 epochs, batch size 16, learning rate 2e-5, max length 512 tokens. GPU: Google Colab T4.
 
 ## Final Metrics
 
-Final metrics will be added after training:
+Test set (79 repositories):
 
-- Accuracy: pending
-- Precision: pending
-- Recall: pending
-- F1-score: pending
+| Metric | Weighted | Macro |
+|---|---|---|
+| Accuracy | **58.23%** | — |
+| Precision | 0.6378 | 0.6504 |
+| Recall | 0.5823 | 0.5808 |
+| F1-Score | 0.5765 | 0.5835 |
+
+Per-class performance:
+
+| Category | Precision | Recall | F1 | Support |
+|---|---|---|---|---|
+| declining | 0.6842 | 0.7647 | **0.7222** | 17 |
+| emerging | 0.6923 | 0.5000 | 0.5806 | 18 |
+| experimental | 0.4474 | 0.7083 | 0.5484 | 24 |
+| mature | 0.7778 | 0.3500 | 0.4828 | 20 |
+
+Best predicted: declining (F1=0.72). Hardest: mature (F1=0.48), heavily confused with experimental (10 of 20 mature repos misclassified as experimental). The baseline model (370 repos, no class balancing) achieved 42.86% accuracy and could not predict declining or experimental at all. Adding 156 repos with more declining/experimental samples improved accuracy by 15.4pp and enabled all-class prediction.
 
 ## Main Limitations
 
